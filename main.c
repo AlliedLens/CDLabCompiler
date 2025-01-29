@@ -18,14 +18,20 @@ void main(){
     }
 
     c = fgetc(fa);
-    int index = 0;
+    char text[4096];
 
     Token* alltokens[1024];
+    int i = 0;
 
     while (c != EOF){
-        
-        alltokens[index] = getTokenFromText(index, &col, &row, &c);
-
-        index++;
+        text[i] = c;
+        i++;
+        c = fgetc(fa);
     }
+
+    text[i] = '\0';
+
+    printf("%s \n is the code to be passed through the lexical analyzer\n", text);
+
+    getTokens(text, alltokens);
 }
