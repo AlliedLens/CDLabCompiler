@@ -1,0 +1,53 @@
+Possible tokens:
+
+@identifier
+@number
+
+@keyword
+- if 
+- else 
+- while 
+- break 
+- continue 
+- return 
+- double 
+- void 
+
+@relation-op
+- ==
+- !=
+- >=
+- <=
+- >
+- <
+
+@arithmetic-op
+- +
+- *
+- / 
+- -
+- %
+
+@logical-op 
+- ||
+- && 
+- !
+- ^
+
+@assignment-op
+- =
+- +=
+- -=
+- *=
+- /=
+- %=
+
+@punctuation
+- (
+- )
+- {
+- }
+- [
+- ]
+- ;
+- ,
