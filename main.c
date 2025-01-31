@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "token.h"
+#include "preprocessor.h"
 
 FILE* fa;
 
@@ -17,6 +18,8 @@ void main(){
         return;
     }
 
+    printf("\n----------------\n Getting the raw text \n--------\n");
+
     c = fgetc(fa);
     char text[4096];
 
@@ -29,9 +32,14 @@ void main(){
         c = fgetc(fa);
     }
 
+
     text[i] = '\0';
 
-    printf("%s \n is the code to be passed through the lexical analyzer\n", text);
+    printf("%s \n----------\n Passing it through the pre-processor\n----------\n",text);
 
-    getTokens(text, alltokens);
+    runPreprocessor(text);
+
+    printf("%s \n--------\n is the code to be passed through the lexical analyzer \n---------\n", text);
+
+    // getTokens(text, alltokens);
 }

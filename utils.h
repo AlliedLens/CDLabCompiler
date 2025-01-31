@@ -24,6 +24,7 @@ bool isDelimiter(char c) { // a delimiter is a piece of data that marks the boun
 
         c == ',' ||
         c == ';' ||
+        c == ':' ||
         
         c == '>' ||
         c == '<' ||
@@ -62,7 +63,8 @@ bool isPunctuation(char c){
         c == '[' ||
         c == ']' ||
         c == '{' ||
-        c == '}'
+        c == '}' ||
+        c == ':'
     ); 
 }
 
