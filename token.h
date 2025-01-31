@@ -2,7 +2,6 @@
 
 
 typedef enum TokTypes{
-    INVALID = -1,
     TOK_EOF = 2,
     
     IDENTIFIER = 3,
@@ -37,15 +36,36 @@ Token* createToken(const char* name, int index, int pos, TokTypes type) {
     return t;
 }
 
+char* TokStringMap(Token* t){
+    char* m[11] = {
+        "xxx",
+        "xxx",
+        "eof",
+        "id",
+
+        "num",
+        "key",
+        
+        "relop",
+        "arithop",
+        "logicalop",
+        "assignop",
+        
+        "punct",
+    };
+
+    return m[t->type];
+}
+
 void printToken(Token* t){
     if (t != NULL) {
-        printf("Name: '%s' , ", t->token_name);
-        printf("Index: %d, ", t->index);
-        printf("pos: %d, ", t->pos);
-        printf("Type: %d, \n", t->type);
-        printf("---------\n");
+        printf("<'%s',", t->token_name);
+        printf("%d,", t->index);
+        printf("x %d,", t->pos);
+        printf(" %s", TokStringMap(t));
+        printf("> ; ");
     }else{
-        printf("token is null\n");
+        printf("token is null");
     }
 }
 
@@ -75,33 +95,36 @@ void getTokens(char* input, Token* allTokens[1024]){
 
                 if ( isInteger(buff) ){
                     allTokens[i] = createToken(buff, i, pos, NUMBER);
+                }else if ( isKeyword(buff) ){
+                    allTokens[i] = createToken(buff, i, pos, KEYWORD); 
                 }else{
-
-                    allTokens[i] = createToken(buff, i, pos, IDENTIFIER); 
+                    allTokens[i] = createToken(buff, i, pos, IDENTIFIER);
                 }
-
-                printToken(allTokens[i]);
                 i++;
                 left = right;
             }
 
             // Handle delimiter (single operator/punctuation)
             if (isDelimiter(input[right])) {
-                if (isOperator(input[right])) {
 
-
+                if (isArithmeticOperator(input[right])) {
                     buff[0] = input[right];
                     buff[1] = '\0';
                     pos = right;
                     allTokens[i] = createToken(buff, i, pos, ARITHOP);
-                    printToken(allTokens[i]);
                     i++;
-                } else if (isPunctuation(input[right])) {
+                }else if (isOperator(input[right])) {
+                    buff[0] = input[right];
+                    buff[1] = '\0';
+                    pos = right;
+                    allTokens[i] = createToken(buff, i, pos, RELOP);
+                    i++;
+                } 
+                else if (isPunctuation(input[right])) {
                     buff[0] = input[right];
                     buff[1] = '\0';
                     pos = right;
                     allTokens[i] = createToken(buff, i, pos, PUNCTUATION);
-                    printToken(allTokens[i]);
                     i++;
                 }
                 right++;

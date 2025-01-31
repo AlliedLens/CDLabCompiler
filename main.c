@@ -23,7 +23,7 @@ void main(){
     c = fgetc(fa);
     char text[4096];
 
-    Token* alltokens[1024];
+
     int i = 0;
 
     while (c != EOF){
@@ -41,5 +41,20 @@ void main(){
 
     printf("%s \n--------\n is the code to be passed through the lexical analyzer \n---------\n", text);
 
-    // getTokens(text, alltokens);
+    Token* alltokens[1024];
+    for (int i = 0; i < 1024; i++){
+        alltokens[i] = createToken("EOF", -1, -1, TOK_EOF);
+    } 
+
+    getTokens(text, alltokens);
+
+    for (int i = 0;  i < 1024; i++){
+        if (alltokens[i]->type == 2 ){
+            break;
+        }else{
+            printToken(alltokens[i]);
+        }
+    }
+
+    printf("\n------\n are the tokens needed for symbol table");
 }
