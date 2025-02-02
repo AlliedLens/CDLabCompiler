@@ -56,5 +56,6 @@ void main(){
         }
     }
 
-    printf("\n------\n are the tokens needed for symbol table");
+    printf("\n------\n are the tokens needed for symbol table \n-------\n");
 }
+

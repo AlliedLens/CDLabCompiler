@@ -107,19 +107,74 @@ void getTokens(char* input, Token* allTokens[1024]){
             // Handle delimiter (single operator/punctuation)
             if (isDelimiter(input[right])) {
 
-                if (isArithmeticOperator(input[right])) {
+                if (isRelationalOperator(&input[right]) > 0){
+                    if (isRelationalOperator(&input[right]) == 1){
+                        buff[0] = input[right];
+                        buff[1] = '\0';
+                        pos = right;
+                        allTokens[i] = createToken(buff, i, pos, RELOP);
+                        i++;
+                    }else{
+                        buff[0] = input[right];
+                        buff[1] = input[right+1];
+                        buff[2] = '\0';
+                        pos = right+1;
+                        allTokens[i] = createToken(buff, i, pos, RELOP);
+                        right = right + 2;
+                        left = right;
+                        i++;
+                        continue;
+                    }
+
+                }else if (isLogicalOperator(&input[right]) > 0){
+
+                    if (isLogicalOperator(&input[right]) == 1){
+                        buff[0] = input[right];
+                        buff[1] = '\0';
+                        pos = right;
+                        allTokens[i] = createToken(buff, i, pos, LOGICALOP);
+                        i++;
+                    }else{
+                        buff[0] = input[right];
+                        buff[1] = input[right+1];
+                        buff[2] = '\0';
+                        pos = right+1;
+                        allTokens[i] = createToken(buff, i, pos, LOGICALOP);
+                        right = right + 2;
+                        left = right;
+                        i++;
+                        continue;
+                    }
+
+
+                }else if (isAssignmentOperator(&input[right])) {
+                    if (isAssignmentOperator(&input[right]) == 1){
+                        buff[0] = input[right];
+                        buff[1] = '\0';
+                        pos = right;
+                        allTokens[i] = createToken(buff, i, pos, ASSIGNOP);
+                        i++;
+                    }else{
+                        buff[0] = input[right];
+                        buff[1] = input[right+1];
+                        buff[2] = '\0';
+                        pos = right+1;
+                        allTokens[i] = createToken(buff, i, pos, ASSIGNOP);
+                        right = right + 2;
+                        left = right;
+                        i++;
+                        continue;
+                    }
+
+                } 
+                
+                else if (isArithmeticOperator(input[right])) {
                     buff[0] = input[right];
                     buff[1] = '\0';
                     pos = right;
                     allTokens[i] = createToken(buff, i, pos, ARITHOP);
                     i++;
-                }else if (isOperator(input[right])) {
-                    buff[0] = input[right];
-                    buff[1] = '\0';
-                    pos = right;
-                    allTokens[i] = createToken(buff, i, pos, RELOP);
-                    i++;
-                } 
+                }
                 else if (isPunctuation(input[right])) {
                     buff[0] = input[right];
                     buff[1] = '\0';

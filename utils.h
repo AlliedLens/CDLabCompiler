@@ -29,13 +29,18 @@ bool isDelimiter(char c) { // a delimiter is a piece of data that marks the boun
         c == '>' ||
         c == '<' ||
         c == '=' ||
+        c == '!' ||
 
         c == '(' ||
         c == ')' || 
         c == '[' ||
         c == ']' ||
         c == '{' ||
-        c == '}'
+        c == '}' ||
+
+        c == '|' ||
+        c == '&' ||
+        c == '^' 
     );
 }
 
@@ -77,6 +82,55 @@ bool isArithmeticOperator(char c){
     ); 
 }
 
+int isRelationalOperator(char* input) {
+
+    if (input[0] == '=') {
+        if (input[1] == '=') return 2; 
+    } 
+    else if (input[0] == '!') {
+        if (input[1] == '=') return 2; 
+    } 
+    else if (input[0] == '>') {
+        if (input[1] == '=') return 2; 
+        return 1; 
+    } 
+    else if (input[0] == '<') {
+        if (input[1] == '=') return 2; 
+        return 1; 
+    }
+
+    return 0; 
+}
+
+int isLogicalOperator(char* input){
+    if (input[0] == '^'){
+        return 1;
+    }else if (input[0] == '!'){
+        return 1;
+    }else if (input[0] == '|' && input[1] == '|'){
+        return 2;
+    }else if (input[0] == '&' && input[1] == '&'){
+        return 2;
+    }
+    return 0;
+}
+
+int isAssignmentOperator(char* input) {
+    if (input[0] == '=') {
+        return 1;  
+    } else if (input[0] == '+' && input[1] == '=') {
+        return 2;  
+    } else if (input[0] == '-' && input[1] == '=') {
+        return 2;  
+    } else if (input[0] == '*' && input[1] == '=') {
+        return 2;  
+    } else if (input[0] == '/' && input[1] == '=') {
+        return 2;  
+    } else if (input[0] == '%' && input[1] == '=') {
+        return 2;  
+    }
+    return 0;  
+}
 // this function check for an valid identifier
 bool isValidIdentifier(char* str)
 {
