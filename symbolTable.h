@@ -3,6 +3,7 @@
 typedef struct Symbol{
     Token tok;
     int size;
-    char scope;
+    char scope[1024];
 }Symbol;
+
 

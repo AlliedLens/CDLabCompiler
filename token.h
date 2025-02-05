@@ -87,7 +87,6 @@ void getTokens(char* input, Token* allTokens[1024]){
             right++;
         
         } else {
-            // Extract token if left < right (non-delimiter lexeme)
             if (left < right) {
                 strncpy(buff, input + left, right - left);
                 buff[right - left] = '\0';
@@ -104,7 +103,6 @@ void getTokens(char* input, Token* allTokens[1024]){
                 left = right;
             }
 
-            // Handle delimiter (single operator/punctuation)
             if (isDelimiter(input[right])) {
 
                 if (isRelationalOperator(&input[right]) > 0){

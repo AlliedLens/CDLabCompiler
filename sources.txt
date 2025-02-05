@@ -6,3 +6,4 @@ https://www.geeksforgeeks.org/c-lexical-analyser-lexer/
 symbol table
 
 https://marcauberer.medium.com/build-a-compiler-symbol-table-2d4582234112
+https://www.studocu.com/in/document/anna-university/compiler-design/cd-lab/77383011
