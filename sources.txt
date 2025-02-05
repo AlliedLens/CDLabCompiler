@@ -1,0 +1,8 @@
+lexical tokenizer
+
+https://www.geeksforgeeks.org/c-lexical-analyser-lexer/
+
+
+symbol table
+
+https://marcauberer.medium.com/build-a-compiler-symbol-table-2d4582234112

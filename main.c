@@ -3,6 +3,7 @@
 #include <string.h>
 #include "token.h"
 #include "preprocessor.h"
+#include "symbolTable.h"
 
 FILE* fa;
 
@@ -57,5 +58,9 @@ void main(){
     }
 
     printf("\n------\n are the tokens needed for symbol table \n-------\n");
+
+    Symbol* SymTable[1024];
+
+
 }
 
