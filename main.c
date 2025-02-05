@@ -6,6 +6,8 @@
 #include "symbolTable.h"
 
 FILE* fa;
+int SYMBOL_TABLE_SIZE = 1024;
+int TOKEN_TABLE_SIZE = 1024;
 
 void main(){
 
@@ -42,14 +44,14 @@ void main(){
 
     printf("%s \n--------\n is the code to be passed through the lexical analyzer \n---------\n", text);
 
-    Token* alltokens[1024];
-    for (int i = 0; i < 1024; i++){
+    Token* alltokens[TOKEN_TABLE_SIZE];
+    for (int i = 0; i < TOKEN_TABLE_SIZE; i++){
         alltokens[i] = createToken("EOF", -1, -1, TOK_EOF);
     } 
 
     getTokens(text, alltokens);
 
-    for (int i = 0;  i < 1024; i++){
+    for (int i = 0;  i < TOKEN_TABLE_SIZE; i++){
         if (alltokens[i]->type == 2 ){
             break;
         }else{
@@ -59,8 +61,20 @@ void main(){
 
     printf("\n------\n are the tokens needed for symbol table \n-------\n");
 
-    Symbol* SymTable[1024];
+    Symbol* symTable[SYMBOL_TABLE_SIZE];
+    initializeSymbolTable(symTable);
+    getSymbolTableFromTokens(symTable, alltokens);
 
+    for (int i = 0;  i < TOKEN_TABLE_SIZE; i++){
+        if (symTable[i]->size == 0 ){
+            break;
+        }else{
+            printSymbol(symTable[i]);
+            printf("\n");
+        }
+    }
+
+    printf("\n-----\n are the symbols received");
 
 }
 

@@ -2,8 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+float c;
+char da;
+
 int main(){
-    int a, b, sum;
+    int a;
+    int b;
+    int sum;
 
     a =   1;
     b = 1;

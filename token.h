@@ -1,5 +1,8 @@
-#include "utils.h"
+#ifndef TOKEN_H
+#define TOKEN_H
 
+#include "utils.h"
+extern int TOKEN_TABLE_SIZE;
 
 typedef enum TokTypes{
     TOK_EOF = 2,
@@ -18,7 +21,7 @@ typedef enum TokTypes{
 } TokTypes;
 
 typedef struct Token{
-    char token_name [1024];
+    char token_name[1024];
     int index;
     int pos;
     TokTypes type;
@@ -69,7 +72,7 @@ void printToken(Token* t){
     }
 }
 
-void getTokens(char* input, Token* allTokens[1024]){
+void getTokens(char* input, Token* allTokens[TOKEN_TABLE_SIZE]){
     int pos = 0;
 
     int left = 0;
@@ -78,7 +81,7 @@ void getTokens(char* input, Token* allTokens[1024]){
     int len = strlen(input);
 
     int i = 0;
-    char buff[1024];
+    char buff[TOKEN_TABLE_SIZE];
     Token* t;
 
     while (right <= len && left <= len){
@@ -186,3 +189,5 @@ void getTokens(char* input, Token* allTokens[1024]){
         }    
     }
 }
+
+#endif
