@@ -49,8 +49,8 @@ int isKeyword(char* rawToken) {
 }
 
 TokTypes checkType(char* rawToken) {
-    if (isKeyword(rawToken)) return KEYWORD;
-    if (isdigit(rawToken)) return NUMBER;
+    // if (isKeyword(rawToken)) return KEYWORD;
+    // if (isdigit(rawToken)) return NUMBER;
     return IDENTIFIER;
 }
 
@@ -86,8 +86,8 @@ int main() {
 
     for (int i = 0; i < tokenCount; i++) {
         TokTypes type = checkType(rawTokens[i]);
-        // tokens[i] = createToken(rawTokens[i], i, positions[i], type);
-        // printToken(tokens[i]);
+        tokens[i] = createToken(rawTokens[i], i, positions[i], type);
+        printToken(tokens[i]);
     }
 
     return 0;
