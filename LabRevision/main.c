@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h> 
+#include <stdbool.h>
+
 
 typedef enum TokTypes {
     TOK_EOF = 2,
@@ -39,7 +41,7 @@ void printToken(Token* t) {
     printf("Name: %s, Index: %d, Position: %d, Type: %d\n", t->tokenName, t->index, t->position, t->type);
 }
 
-int isKeyword(char* rawToken) {
+bool isKeyword(char* rawToken) {
     char* KEYWORDS[3] = {"int", "if","return" };
 
     for (int i = 0; i < 3; i++) {
@@ -48,8 +50,19 @@ int isKeyword(char* rawToken) {
     return 0;
 }
 
+bool isArithmeticOperator(char* rawToken){
+    return(
+        strcmp(rawToken, "+") == 0 ||
+        strcmp(rawToken, "-")  == 0 ||
+        strcmp(rawToken, "*")  == 0
+    ); 
+}
+
+
 TokTypes checkType(char* rawToken) {
-    // if (isKeyword(rawToken)) return KEYWORD;
+    if (isKeyword(rawToken)) return KEYWORD;
+    if (isArithmeticOperator(rawToken)) return ARITHOP;
+
     // if (isdigit(rawToken)) return NUMBER;
     return IDENTIFIER;
 }
