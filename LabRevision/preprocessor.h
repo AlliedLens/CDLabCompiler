@@ -16,8 +16,8 @@ void removeCommentsAndExcessWhiteSpaces(char* input){
                 r++;
             }
         }
-        else if (input[r] == '/'){
-            if (r+1 < strlen(input) && input[r+1] == '/'){
+        else if (input[r] == ';'){
+            if (r+1 < strlen(input)){
                 // this is a single line comment
                 while (input[r] != '\n' && r<= strlen(input)){
                     r++;

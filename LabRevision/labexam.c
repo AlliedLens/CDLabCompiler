@@ -3,18 +3,15 @@
 #include <string.h>
 #include <ctype.h> 
 #include <stdbool.h>
-
+#include "preprocessor.h"
 
 typedef enum TokTypes {
-    TOK_EOF = 2,
-    IDENTIFIER = 3,
-    NUMBER = 4,
-    KEYWORD = 5,
-    RELOP = 6,
-    ARITHOP = 7,
-    LOGICALOP = 8,
-    ASSIGNOP = 9,
-    STRING_LITERAL = 10
+    TOK_EOF = 0,
+    OPCODE = 1,
+    REG = 2,
+    CONST = 3,
+    LITERAL = 4,
+    LABELS = 5
 } TokTypes;
 
 typedef struct Token {
@@ -42,11 +39,25 @@ Token* createToken(char* name, int index, int position, TokTypes type) {
     return t;
 }
 
-void printToken(Token* t) {
-    if (!t) return;
-    printf("Name: %s, Index: %d, Position: %d, Type: %d\n", t->tokenName, t->index, t->position, t->type);
+char* TokStringMap(Token* t){
+    char* m[6] = {
+        "xxx",
+        "opcode",
+        "reg",
+        "const",
+
+        "literal",
+        "labels",
+
+    };
+
+    return m[t->type];
 }
 
+void printToken(Token* t) {
+    if (!t) return;
+    printf("Name: %s, Index: %d, Position: %d, Type: %s\n", t->tokenName, t->index, t->position, TokStringMap(t) );
+}
 
 void createSymbol(Symbol* symbol, Token* tok, int size, const char* type) {
     symbol->tok = tok;  
@@ -55,43 +66,40 @@ void createSymbol(Symbol* symbol, Token* tok, int size, const char* type) {
     symbol->type[sizeof(symbol->type) - 1] = '\0';
 }
 
-void printSymbol(const Symbol* symbol) {
-    printf(" { ");
-    printToken(symbol->tok);
-    printf(" Size: %d, Type: %s }", symbol->size, symbol->type);
+void printSymbol(Token* t) {
+    if (!t) return;
+    printf("Name: %s, Position: %d, Type: %s\n", t->tokenName,  t->position,TokStringMap(t));
 }
 
+bool isOpcode(char* rawToken) {
+    char* OPCODES[6] = {"MOVLW", "MOVWF", "ADDWF","SUBWF", "CALL", "GOTO" };
 
-
-bool isKeyword(char* rawToken) {
-    char* KEYWORDS[3] = {"int", "if","return" };
-
-    for (int i = 0; i < 3; i++) {
-        if (strcmp(rawToken, KEYWORDS[i]) == 0) return 1;
+    for (int i = 0; i < 6; i++) {
+        if (strcmp(rawToken, OPCODES[i]) == 0) return 1;
     }
     return 0;
 }
 
-bool isArithmeticOperator(char* rawToken){
-    return(
-        strcmp(rawToken, "+") == 0 ||
-        strcmp(rawToken, "-")  == 0 ||
-        strcmp(rawToken, "*")  == 0
-    ); 
+bool isReg(char* rawToken) {
+    char* REGISTERS[4] = {"WREG", "STATUS","PORTB", "RISB"};
+
+    for (int i = 0; i < 4; i++) {
+        if (strcmp(rawToken, REGISTERS[i]) == 0) return 1;
+    }
+    return 0;
 }
 
-
 TokTypes checkType(char* rawToken) {
-    if (isKeyword(rawToken)) return KEYWORD;
-    if (isArithmeticOperator(rawToken)) return ARITHOP;
-
-    // if (isdigit(rawToken)) return NUMBER;
-    return IDENTIFIER;
+    if (isOpcode(rawToken)) return OPCODE;
+    if (isReg(rawToken)) return REG;
+    if (strstr(rawToken, ":") != NULL) return LABELS;
+    if (strstr(rawToken, "0x") != NULL) return CONST;
+    return LITERAL;
 }
 
 int main() {
     char c = '\0';      
-    FILE* fp = fopen("sample.c", "r");
+    FILE* fp = fopen("examsample.txt", "r");
 
     char txt[2048];
     int i = 0;
@@ -101,6 +109,9 @@ int main() {
         txt[i] = c;
         i++;
     }
+
+    runPreprocessor(txt); 
+    printf("preprocesesd text is %s \n", txt);
 
     // splitting text into uncategorized tokens
     char* delimiters = " ,;#{}()\n\t"; 
@@ -116,6 +127,9 @@ int main() {
         tokenCount++;
     }
 
+    printf("\n----------------\n");
+    printf("tokens are \n");
+
     // put tokens in their categories
     Token* tokens[1024];
 
@@ -124,6 +138,9 @@ int main() {
         tokens[i] = createToken(rawTokens[i], i, positions[i], type);
         printToken(tokens[i]);
     }
+
+    printf("\n--------------\n");
+    printf("symbols are \n");
 
     // get symbols from tokens
     Symbol* table[1024];
@@ -137,13 +154,9 @@ int main() {
     }
 
     while ( i < tokenCount){
-        if (tokens[i]->type == KEYWORD){
-            i++;
-            if (tokens[i]->type == IDENTIFIER){
-                createSymbol(table[symbolCount], tokens[i], 8, tokens[i-1]->tokenName);
-                printSymbol(table[symbolCount]);
-                symbolCount++;
-            }
+        if (tokens[i]->type == REG || tokens[i]->type == LABELS){
+            printSymbol(tokens[i]);
+            symbolCount++;
         }
         i++;
     }
