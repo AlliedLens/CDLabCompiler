@@ -24,6 +24,12 @@ typedef struct Token {
     TokTypes type;
 } Token;
 
+typedef struct Symbol{
+    Token* tok;
+    int size;
+    char type[128];
+}Symbol;
+
 
 Token* createToken(char* name, int index, int position, TokTypes type) {
     Token* t = (Token*)malloc(sizeof(Token));    
@@ -40,6 +46,22 @@ void printToken(Token* t) {
     if (!t) return;
     printf("Name: %s, Index: %d, Position: %d, Type: %d\n", t->tokenName, t->index, t->position, t->type);
 }
+
+
+void createSymbol(Symbol* symbol, Token* tok, int size, const char* type) {
+    symbol->tok = tok;  
+    symbol->size = size;
+    strncpy(symbol->type, type, sizeof(symbol->type) - 1);
+    symbol->type[sizeof(symbol->type) - 1] = '\0';
+}
+
+void printSymbol(const Symbol* symbol) {
+    printf(" { ");
+    printToken(symbol->tok);
+    printf(" Size: %d, Type: %s }", symbol->size, symbol->type);
+}
+
+
 
 bool isKeyword(char* rawToken) {
     char* KEYWORDS[3] = {"int", "if","return" };
@@ -101,6 +123,29 @@ int main() {
         TokTypes type = checkType(rawTokens[i]);
         tokens[i] = createToken(rawTokens[i], i, positions[i], type);
         printToken(tokens[i]);
+    }
+
+    // get symbols from tokens
+    Symbol* table[1024];
+
+    i = 0;
+    int symbolCount = 0;
+
+    for (int i = 0; i < 1024; i++){
+        table[i] = (Symbol*)malloc(sizeof(Symbol));
+        strcpy(table[i]->type, "NULL");
+    }
+
+    while ( i < tokenCount){
+        if (tokens[i]->type == KEYWORD){
+            i++;
+            if (tokens[i]->type == IDENTIFIER){
+                createSymbol(table[symbolCount], tokens[i], 8, tokens[i-1]->tokenName);
+                printSymbol(table[symbolCount]);
+                symbolCount++;
+            }
+        }
+        i++;
     }
 
     return 0;
